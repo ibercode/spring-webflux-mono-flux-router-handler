@@ -66,7 +66,7 @@ CRUD REQUESTs and URLs:
 
 #GET one driver by car number
 
-	GET localhost:8080/rest/drivers/55
+	GET localhost:8080/rest/drivers/14
 	
 #POST save new driver
 
@@ -74,11 +74,11 @@ CRUD REQUESTs and URLs:
 	
 #PUT  update existing driver
 
-	PUT localhost:8080/rest/drivers/
+	PUT localhost:8080/rest/drivers/14
 	
 #DELETE delete existing driver by car number
 
-	DELETE localhost:8080/rest/drivers/77
+	DELETE localhost:8080/rest/drivers/14
 	
 
 ______________________
