@@ -58,4 +58,27 @@ spring.data.mongodb.uri=mongodb://localhost:27017/reactive
 logging.level.org.springframework.data=DEBUG
 logging.level.=error
 
+CRUD REQUESTs and URLs:
+
+#GET all drivers
+
+	GET localhost:8080/rest/drivers   
+
+#GET one driver by car number
+
+	GET localhost:8080/rest/drivers/55
+	
+#POST save new driver
+
+	POST localhost:8080/rest/drivers
+	
+#PUT  update existing driver
+
+	PUT localhost:8080/rest/drivers/
+	
+#DELETE delete existing driver by car number
+
+	DELETE localhost:8080/rest/drivers/77
+	
+
 ______________________
