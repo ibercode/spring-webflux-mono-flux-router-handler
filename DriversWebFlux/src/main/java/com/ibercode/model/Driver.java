@@ -11,9 +11,9 @@ public class Driver {
 	private String name;
 	private int car;
 	private String team;
+	
 	public Driver() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Driver(String id, String name, int car, String team) {
 		super();
@@ -22,6 +22,12 @@ public class Driver {
 		this.car = car;
 		this.team = team;
 	}
+	public Driver(String name, int car, String team) {
+	    this.name = name;
+	    this.car = car;
+	    this.team = team;
+	}
+	
 	public String getId() {
 		return id;
 	}
