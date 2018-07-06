@@ -6,8 +6,8 @@ import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import com.ibercode.api.DriverService;
 import com.ibercode.model.Driver;
-import com.ibercode.service.DriverService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,16 +25,27 @@ public class DriverHandler {
     public Mono<ServerResponse> findAllDrivers(ServerRequest request) {
 
 	Flux<Driver> drivers = service.findAll();
-	return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(drivers, Driver.class);
+	
+	return ServerResponse
+		.ok()
+		.contentType(MediaType.APPLICATION_JSON)
+		.body(drivers, Driver.class);
     }
 
     // GET - get one driver by car number
     public Mono<ServerResponse> findDriverByCarNumber(ServerRequest request) {
 
-	Mono<Driver> driver = service.findDriverByCar(Integer.parseInt(request.pathVariable("car")));
-
-	return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(driver, Driver.class);
-
+	
+	Mono<Driver> driver = service
+		.findDriverByCar(Integer.parseInt(request.pathVariable("car")));
+	Mono<ServerResponse> notFound = ServerResponse.notFound().build();
+	
+	return driver
+		.flatMap(d -> ServerResponse
+				.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(driver, Driver.class))
+		.switchIfEmpty(notFound);
     }
 
     // POST - save new driver
@@ -42,28 +53,37 @@ public class DriverHandler {
 
 	Mono<Driver> driver = request.body(BodyExtractors.toMono(Driver.class)).flatMap(d -> service.save(d));
 
-	return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(driver, Driver.class);
+	return ServerResponse
+		.ok()
+		.contentType(MediaType.APPLICATION_JSON)
+		.body(driver, Driver.class);
 
     }
 
     // PUT - update driver
     public Mono<ServerResponse> updateDriver(ServerRequest request) {
 
-	Mono<Driver> driver = service.findDriverByCar(Integer.parseInt(request.pathVariable("car"))).flatMap(d -> {
-	    Driver din = request.body(BodyExtractors.toMono(Driver.class)).block();
-	    d.setCar(din.getCar());
-	    d.setName(din.getName());
-	    d.setTeam(din.getTeam());
-	    return service.save(d);
-	});
-	return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(driver, Driver.class);
+	Mono<Driver> driver = service.findDriverByCar(Integer.parseInt(request.pathVariable("car")))
+		.flatMap(d -> {
+                	    Driver din = request.body(BodyExtractors.toMono(Driver.class)).block();
+                	    d.setCar(din.getCar());
+                	    d.setName(din.getName());
+                	    d.setTeam(din.getTeam());
+                	    return service.save(d);
+			});
+	return ServerResponse.ok()
+		.contentType(MediaType.APPLICATION_JSON)
+		.body(driver, Driver.class);
 
     }
 
     // DELETE - delete driver by car number
     public Mono<ServerResponse> deleteDriver(ServerRequest request) {
 
-	service.findDriverByCar(Integer.parseInt(request.pathVariable("car"))).flatMap(d -> service.delete(d)).subscribe();
+	service
+		.findDriverByCar(Integer.parseInt(request.pathVariable("car")))
+		.flatMap(d -> service.delete(d))
+		.subscribe();
 
 	return ServerResponse.ok().build();
     }

@@ -1,4 +1,4 @@
-package com.ibercode.api;
+package com.ibercode.dao;
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 

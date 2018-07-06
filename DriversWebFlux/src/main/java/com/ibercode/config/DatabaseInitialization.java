@@ -3,7 +3,7 @@ package com.ibercode.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.ibercode.api.DriverRepository;
+import com.ibercode.dao.DriverRepository;
 import com.ibercode.model.Driver;
 
 import reactor.core.publisher.Mono;
